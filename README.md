@@ -5,7 +5,7 @@
 </h1>
 
 ## Official Updates:
-- 0.0.1 (2/6/2018)
+- 0.0.1 (2/6/2018):
     - In this first update, I have pretty much only the utils, a basic command system (untested) and half of the language file.  I'll continue updating this soon.
 
 <h2 align="center">My Social Media Links</h2>
