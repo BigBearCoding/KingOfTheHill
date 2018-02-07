@@ -1,6 +1,0 @@
-name: King_of_the_Hill
-version: 0.1.0
-description: A remake of the 1.8 plugin 'KOTH' by sky8the2flies and myself
-author: BigBearCoding
-main: KOTH.Main
-depend: [WorldEdit]

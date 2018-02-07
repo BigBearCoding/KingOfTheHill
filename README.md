@@ -8,12 +8,12 @@
 - 0.0.1 (2/5/2018):
     - In this first update, I have pretty much only the utils, a basic command system (untested) and half of the language file.  I'll continue updating this soon.
 - 0.2.1 (2/6/2018):
-    -Untested arena system was added, as well as placeholder classes
-    -Updated lang file to contain more messages
-    -Lang file now registers and can be written to and edited
-    -Time parser was updated to help with arena information
-    -Command system was added, more commands coming soon
-    -King of the Hill now requires [WorldEdit](https://github.com/sk89q/WorldEdit) to start
+    - Untested arena system was added, as well as placeholder classes
+    - Updated lang file to contain more messages
+    - Lang file now registers and can be written to and edited
+    - Time parser was updated to help with arena information
+    - Command system was added, more commands coming soon
+    - King of the Hill now requires [WorldEdit](https://github.com/sk89q/WorldEdit) to start
 
 <h2 align="center">My Social Media Links</h2>
 <p align="center">
