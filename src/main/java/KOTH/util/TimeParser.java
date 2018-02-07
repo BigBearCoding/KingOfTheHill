@@ -2,6 +2,10 @@ package KOTH.util;
 
 import org.apache.commons.lang.time.DurationFormatUtils;
 
+import java.sql.Time;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by Mike (c) 2017. All rights reserved.
  * Any code contained within KOTH (this document), and any associated APIs with similar branding
@@ -23,10 +27,20 @@ public class TimeParser {
         } else amount = parseTime(time);
         return amount;
     }
-    public static String parseToTimeFormat(String time)
-    {
+    public static String parseToTimeFormat(String time) {
         int millis = (parseToSeconds(time)*1000);
         return DurationFormatUtils.formatDuration(millis, "H:mm:ss", true);
+    }
+
+    public static String timeConversion(long totalSeconds) {
+        final long MINUTES_IN_AN_HOUR = 60;
+        final long SECONDS_IN_A_MINUTE = 60;
+
+        long seconds = totalSeconds % SECONDS_IN_A_MINUTE;
+        long totalMinutes = totalSeconds / SECONDS_IN_A_MINUTE;
+        long minutes = totalMinutes % MINUTES_IN_AN_HOUR;
+        long hours = totalMinutes / MINUTES_IN_AN_HOUR;
+        return (hours != 0 ? hours + "h " : "") + (minutes < 10 ? "0" + minutes + "m " : minutes + "m ") + (seconds < 10 ? "0" + seconds  + "s" : seconds + "s");
     }
 
     private static int parseTime(String time) {
@@ -50,5 +64,4 @@ public class TimeParser {
         }
         return 0;
     }
-
 }

@@ -12,6 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.SimplePluginManager;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -34,23 +36,29 @@ public class Framework implements CommandExecutor{
     private CommandMap map;
     private Plugin plugin;
 
-    public Framework(Plugin plugin){
+    public Framework(Plugin plugin) {
         this.plugin = plugin;
-        PluginManager manager = plugin.getServer().getPluginManager();
-        try{
-            Field field = PluginManager.class.getDeclaredField("commanndMap");
-            field.setAccessible(true);
-            map = (CommandMap) field.get(manager);
-        }catch(NoSuchFieldException e){
-            LogUtil.log(LogLevel.WARN, e.getMessage());
-        }catch(IllegalAccessException e){
-            LogUtil.log(LogLevel.WARN, e.getMessage());
+        if (plugin.getServer().getPluginManager() instanceof SimplePluginManager) {
+            SimplePluginManager manager = (SimplePluginManager) plugin.getServer().getPluginManager();
+            try {
+                Field field = SimplePluginManager.class.getDeclaredField("commandMap");
+                field.setAccessible(true);
+                map = (CommandMap) field.get(manager);
+            } catch (IllegalArgumentException e) {
+                LogUtil.log(LogLevel.ERROR, "Exception caught when registering Framework.");
+            } catch (SecurityException e) {
+                LogUtil.log(LogLevel.ERROR, "Exception caught when registering Framework.");
+            } catch (IllegalAccessException e) {
+                LogUtil.log(LogLevel.ERROR, "Exception caught when registering Framework.");
+            } catch (NoSuchFieldException e) {
+                LogUtil.log(LogLevel.ERROR, "Exception caught when registering Framework.");
+            }
         }
     }
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String name, String[] args){
-        return false;
+        return handle(commandSender, command, name, args);
     }
 
     public boolean handle(CommandSender sender, Command cmd, String name, String[] args){
@@ -77,11 +85,11 @@ public class Framework implements CommandExecutor{
                     method.invoke(methodObject, new Arguments(sender, cmd, name, args,
                             cmdLabel.split("\\.").length - 1));
                 } catch (IllegalArgumentException e) {
-                    LogUtil.log(LogLevel.WARN, "Exception caught when handling " + cmdLabel + ". Exception: " + e.getMessage());
+                    LogUtil.log(LogLevel.ERROR, "Exception caught when handling " + cmdLabel + ". Exception: " + e.getMessage());
                 } catch (IllegalAccessException e) {
-                    LogUtil.log(LogLevel.WARN, "Exception caught when handling " + cmdLabel + ". Exception: " + e.getMessage());
+                    LogUtil.log(LogLevel.ERROR, "Exception caught when handling " + cmdLabel + ". Exception: " + e.getMessage());
                 } catch (InvocationTargetException e) {
-                    LogUtil.log(LogLevel.WARN, "Exception caught when handling " + cmdLabel + ". Exception: " + e.getMessage());
+                    LogUtil.log(LogLevel.ERROR, "Exception caught when handling " + cmdLabel + ". Exception: " + e.getMessage());
                 }
                 return true;
             }

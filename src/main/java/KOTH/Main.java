@@ -1,11 +1,18 @@
 package KOTH;
 
+import KOTH.arenas.ArenaManager;
 import KOTH.commands.Framework;
+import KOTH.commands.commandcenter.KOTHCommand;
 import KOTH.util.BFile;
+import KOTH.util.chat.Lang;
+import KOTH.util.chat.log.LogLevel;
+import KOTH.util.chat.log.LogUtil;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.TimeZone;
 
 /**
  * Created by BigBearCoding (c) 2018. All rights reserved.
@@ -28,8 +35,10 @@ public class Main extends JavaPlugin{
     @Override
     public void onEnable() {
         instance = this;
-
-        framework = new Framework(this);
+        initialSetup();
+        if(getWorldEdit() == null){
+            LogUtil.log(LogLevel.ERROR, "WorldEdit was not located.");
+        }
     }
 
     @Override
@@ -55,8 +64,59 @@ public class Main extends JavaPlugin{
         return language;
     }
 
-    private void registerCommands(){
+    private void initialSetup(){
+        registerLanguage();
+        registerCommands();
+        registerConfig();
+        registerEvents();
+        ArenaManager.getManager().setupArenas();
+        //TODO Register all rewards
+    }
 
+    private void registerCommands(){
+        framework = new Framework(this);
+        framework.registerCommands(new KOTHCommand());
+    }
+
+    private void registerConfig(){
+
+    }
+
+    private void registerLanguage(){
+        language = new BFile(getDataFolder(), "language");
+        if(!language.fileExists()){
+            if(language.createFile()){
+                language.loadFile();
+                for(Lang item : Lang.values()){
+                    if(language.getString(item.getPath()) == null){
+                        language.set(item.getPath(), item.getDef());
+                    }
+                }
+                language.saveFile();
+            }else{
+                LogUtil.log(LogLevel.ERROR, "Could not create language file. This is a fatal error, disabling...");
+                return;
+            }
+        }
+        language.loadFile();
+    }
+
+    private void registerEvent(){
+
+    }
+
+    private void registerEvents(){
+
+    }
+
+    public TimeZone getTimeZone(){
+        TimeZone zone;
+        try{
+            zone = TimeZone.getTimeZone(getConfigFile().getString("koth.timezone"));
+        }catch(NullPointerException npe){
+            zone = TimeZone.getDefault();
+        }
+        return zone;
     }
 
 }

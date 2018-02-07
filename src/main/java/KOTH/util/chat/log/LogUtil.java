@@ -1,5 +1,6 @@
 package KOTH.util.chat.log;
 
+import KOTH.util.chat.Lang;
 import KOTH.util.chat.SystemColor;
 import org.bukkit.Bukkit;
 
@@ -26,10 +27,10 @@ public class LogUtil {
 
     public static void log(LogLevel level, String msg){
         if(level == LogLevel.ERROR){
-            System.out.println(level.getPrintColor() + msg + SystemColor.RESET);
+            System.out.println(Lang.CONSOLE_PREFIX.toString() + level.getPrintColor() + msg + SystemColor.RESET);
             Bukkit.getServer().shutdown();
         }else{
-            System.out.println(level.getPrintColor() + msg + SystemColor.RESET);
+            System.out.println(Lang.CONSOLE_PREFIX.toString() + level.getPrintColor() + msg + SystemColor.RESET);
         }
     }
 
